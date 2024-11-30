@@ -2,16 +2,16 @@
 
 Use [Gren](https://gren-lang.org/) via nix.
 
-You can use `github:blaix/nix-gren` most places you'd use a package name or URL.
+You can use `github:gren-lang/nix` most places you'd use a package name or URL.
 For example:
 
-* [devbox](https://www.jetify.com/devbox): `devbox add github:blaix/nix-gren`
-* nix shell: `nix shell github:blaix/nix-gren`
+* [devbox](https://www.jetify.com/devbox): `devbox add github:gren-lang/nix`
+* nix shell: `nix shell github:gren-lang/nix`
 
 You can point to a specific ref (commit, tag, branch) like this:
 
-* `github:blaix/nix-gren/main`
-* `github:blaix/nix-gren/0.4.5`
+* `github:gren-lang/nix/main`
+* `github:gren-lang/nix/0.4.5`
 
 ## Bumping the gren version
 

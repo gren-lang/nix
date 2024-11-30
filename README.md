@@ -2,7 +2,7 @@
 
 Use [Gren](https://gren-lang.org/) via nix.
 
-You should be able to use `github:blaix/nix-gren` anywhere you'd use a package name or URL.
+You can use `github:blaix/nix-gren` most places you'd use a package name or URL.
 For example:
 
 * [devbox](https://www.jetify.com/devbox): `devbox add github:blaix/nix-gren`

@@ -1,3 +1,4 @@
+# inspired by https://www.nmattia.com/posts/2022-12-18-lockfile-trick-package-npm-project-with-nix/
 {
   description = "The Gren programming language";
 
@@ -8,22 +9,35 @@
 
   outputs = { self, systems, nixpkgs }:
     let
-      src = ./.;
       eachSystem = nixpkgs.lib.genAttrs (import systems);
-      pkgJson = builtins.fromJSON (builtins.readFile (src + "/package.json"));
+      pkgJson = builtins.fromJSON (builtins.readFile (./package.json));
+      pkgLock = builtins.fromJSON (builtins.readFile (./package-lock.json));
     in {
     packages = eachSystem (system: {
       default = 
-        with import nixpkgs { system = system; };
+        with import nixpkgs { inherit system; };
+        let
+          gren = pkgs.fetchurl { 
+            url = pkgLock.packages.${"node_modules/gren-lang"}.resolved; 
+            hash = pkgLock.packages.${"node_modules/gren-lang"}.integrity;
+          };
+        in
         pkgs.stdenv.mkDerivation {
-          inherit src;
-          name = "gren";
+          src = ./.;
+          pname = "gren";
           version = pkgJson.dependencies.${"gren-lang"};
           buildInputs = [ pkgs.nodejs_20 ];
+          buildPhase = ''
+            export HOME=$PWD/.home
+            export npm_config_cache=$PWD/.npm
+            mkdir -p $out/js
+            cd $out/js
+            cp -r $src/. .
+            npm cache add "${gren}"
+            npm ci
+          '';
           installPhase = ''
-            mkdir -p $out/bin
-            cp $src/node_modules/gren-lang/index.js $out/bin/gren
-            patchShebangs $out/bin/gren
+            ln -s $out/js/node_modules/.bin $out/bin
           '';
         };
     });

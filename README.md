@@ -8,7 +8,10 @@ For example:
 * [devbox](https://www.jetify.com/devbox): `devbox add github:blaix/nix-gren`
 * nix shell: `nix shell github:blaix/nix-gren`
 
-You can point to a specific ref (commit, tag, branch) like this: `github:blaix/nix-gren/main`
+You can point to a specific ref (commit, tag, branch) like this:
+
+* `github:blaix/nix-gren/main`
+* `github:blaix/nix-gren/0.4.5`
 
 ## Bumping the gren version
 

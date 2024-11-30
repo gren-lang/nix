@@ -9,3 +9,13 @@ For example:
 * nix shell: `nix shell github:blaix/nix-gren`
 
 You can point to a specific ref (commit, tag, branch) like this: `github:blaix/nix-gren/main`
+
+## Bumping the gren version
+
+* update version in [`package.json`](/package.json)
+* `npm install`
+* `nix flake update`
+* test with `nix build .#` which should build an executable at `./result/bin/gren`
+* commit the updated `package.json`, `package-lock.json` and `flake.lock` files
+* `git tag -a [version number]`
+* `git push --tags origin main`

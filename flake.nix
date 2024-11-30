@@ -20,9 +20,10 @@
           name = "gren";
           version = pkgJson.dependencies.${"gren-lang"};
           buildInputs = [ pkgs.nodejs_20 ];
-          buildPhase = "mkdir -p $out/bin";
           installPhase = ''
-            ln -s $src/node_modules/gren-lang/index.js $out/bin/gren
+            mkdir -p $out/bin
+            cp $src/node_modules/gren-lang/index.js $out/bin/gren
+            patchShebangs $out/bin/gren
           '';
         };
     });

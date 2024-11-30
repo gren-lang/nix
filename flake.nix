@@ -12,7 +12,13 @@
       eachSystem = nixpkgs.lib.genAttrs (import systems);
       pkgJson = builtins.fromJSON (builtins.readFile (./package.json));
       pkgLock = builtins.fromJSON (builtins.readFile (./package-lock.json));
+      nodePkg = "nodejs_20";
     in {
+    devShells = eachSystem(system: {
+      default =
+        with import nixpkgs { inherit system; };
+        mkShell { buildInputs = [ pkgs.${nodePkg} ]; }; 
+    });
     packages = eachSystem (system: {
       default = 
         with import nixpkgs { inherit system; };
@@ -26,7 +32,7 @@
           src = ./.;
           pname = "gren";
           version = pkgJson.dependencies.${"gren-lang"};
-          buildInputs = [ pkgs.nodejs_20 ];
+          buildInputs = [ pkgs.${nodePkg} ];
           buildPhase = ''
             export HOME=$PWD/.home
             export npm_config_cache=$PWD/.npm

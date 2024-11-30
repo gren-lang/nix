@@ -7,32 +7,37 @@
     systems.url = "github:nix-systems/default";
   };
 
-  outputs = { self, systems, nixpkgs }:
-    let
-      eachSystem = nixpkgs.lib.genAttrs (import systems);
-      pkgJson = builtins.fromJSON (builtins.readFile (./package.json));
-      pkgLock = builtins.fromJSON (builtins.readFile (./package-lock.json));
-      nodePkg = "nodejs_20";
-    in {
-    devShells = eachSystem(system: {
-      default =
-        with import nixpkgs { inherit system; };
-        mkShell { buildInputs = [ pkgs.${nodePkg} ]; }; 
+  outputs = {
+    self,
+    systems,
+    nixpkgs,
+  }: let
+    eachSystem = nixpkgs.lib.genAttrs (import systems);
+    pkgJson = builtins.fromJSON (builtins.readFile ./package.json);
+    pkgLock = builtins.fromJSON (builtins.readFile ./package-lock.json);
+    nodePkg = "nodejs_20";
+  in {
+    devShells = eachSystem (system: {
+      default = with import nixpkgs {inherit system;};
+        mkShell {
+          buildInputs = [
+            pkgs.${nodePkg}
+            pkgs.alejandra
+          ];
+        };
     });
     packages = eachSystem (system: {
-      default = 
-        with import nixpkgs { inherit system; };
-        let
-          gren = pkgs.fetchurl { 
-            url = pkgLock.packages.${"node_modules/gren-lang"}.resolved; 
-            hash = pkgLock.packages.${"node_modules/gren-lang"}.integrity;
-          };
-        in
+      default = with import nixpkgs {inherit system;}; let
+        gren = pkgs.fetchurl {
+          url = pkgLock.packages.${"node_modules/gren-lang"}.resolved;
+          hash = pkgLock.packages.${"node_modules/gren-lang"}.integrity;
+        };
+      in
         pkgs.stdenv.mkDerivation {
           src = ./.;
           pname = "gren";
           version = pkgJson.dependencies.${"gren-lang"};
-          buildInputs = [ pkgs.${nodePkg} ];
+          buildInputs = [pkgs.${nodePkg}];
           buildPhase = ''
             export HOME=$PWD/.home
             export npm_config_cache=$PWD/.npm

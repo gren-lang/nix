@@ -13,7 +13,7 @@ You can point to a specific ref (commit, tag, branch) like this:
 * `github:gren-lang/nix/main`
 * `github:gren-lang/nix/0.4.5`
 
-## Bumping the gren version
+## Bumping the gren version in this repo
 
 * update version in [`package.json`](/package.json)
 * Start a dev shell: `nix develop`

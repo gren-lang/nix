@@ -23,5 +23,5 @@ You can point to a specific ref (commit, tag, branch) like this:
 * commit the updated `package.json`, `package-lock.json` and `flake.lock` files
 * git push origin main
 * Test with `nix shell github:gren-lang/nix/main`
-* `git tag -a [version number]`
-* `git push --tags origin`
+* `git branch [version number]` using the gren compiler version number (not the npm or nix package version number)
+* `git push origin [version number]`

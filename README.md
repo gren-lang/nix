@@ -22,6 +22,6 @@ You can point to a specific ref (commit, tag, branch) like this:
 * test with `nix build .#` which should build an executable at `./result/bin/gren`
 * commit the updated `package.json`, `package-lock.json` and `flake.lock` files
 * git push origin main
-* Test with `nix shell github:gren-lang/nix`
+* Test with `nix shell github:gren-lang/nix/main`
 * `git tag -a [version number]`
 * `git push --tags origin`

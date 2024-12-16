@@ -28,9 +28,19 @@
     });
     packages = eachSystem (system: {
       default = with import nixpkgs {inherit system;}; let
+        # cache all the packages that end up in node_modules
+        # so they don't have to download during the build phase when we are sandboxed
         gren = pkgs.fetchurl {
           url = pkgLock.packages.${"node_modules/gren-lang"}.resolved;
           hash = pkgLock.packages.${"node_modules/gren-lang"}.integrity;
+        };
+        postject = pkgs.fetchurl {
+          url = pkgLock.packages.${"node_modules/postject"}.resolved;
+          hash = pkgLock.packages.${"node_modules/postject"}.integrity;
+        };
+        commander = pkgs.fetchurl {
+          url = pkgLock.packages.${"node_modules/commander"}.resolved;
+          hash = pkgLock.packages.${"node_modules/commander"}.integrity;
         };
       in
         pkgs.stdenv.mkDerivation {
@@ -45,6 +55,8 @@
             cd $out/js
             cp -r $src/. .
             npm cache add "${gren}"
+            npm cache add "${postject}"
+            npm cache add "${commander}"
             npm ci
           '';
           installPhase = ''

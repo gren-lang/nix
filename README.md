@@ -15,8 +15,8 @@ You can point to a specific ref (commit, tag, branch) like this:
 
 ## Bumping the gren version in this repo
 
-* update version in [`package.json`](/package.json)
 * Start a dev shell: `nix develop`
+* Update version in [`package.json`](/package.json)
 * Update package lock file: `npm install`
 * Update flake lock file: `nix flake update`
 * test with `nix build .#` which should build an executable at `./result/bin/gren`

@@ -28,8 +28,8 @@
     });
     packages = eachSystem (system: {
       default = with import nixpkgs {inherit system;}; let
-        # cache all the packages that end up in node_modules
-        # so they don't have to download during the build phase when we are sandboxed
+        # Download all packages that end up in node_modules so they can be
+        # pulled from cache in the build phase when we are sandboxed.
         gren = pkgs.fetchurl {
           url = pkgLock.packages.${"node_modules/gren-lang"}.resolved;
           hash = pkgLock.packages.${"node_modules/gren-lang"}.integrity;

@@ -1,6 +1,6 @@
-# Gren Nix Package
+# Gren Nix Flake
 
-Use [Gren](https://gren-lang.org/) via nix.
+Use [Gren](https://gren-lang.org/) via nix flakes.
 
 You can use `github:gren-lang/nix` most places you'd use a package name or URL.
 For example:

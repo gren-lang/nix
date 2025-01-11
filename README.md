@@ -20,9 +20,8 @@ You can point to a specific ref (commit, tag, branch) like this:
 * Update package lock file: `npm install`
 * NOTE: if there was anything added or removed from the dependencies in `package-lock.json` you will need to update `flake.nix` to add them to the npm cache. TODO: automate this.
 * Update flake lock file: `nix flake update`
-* test with `nix build .#` which should build an executable at `./result/bin/gren`
-* commit the updated `package.json`, `package-lock.json` and `flake.lock` files
-* git push origin main
-* Test with `nix shell github:gren-lang/nix/main`
-* `git branch [version number]` using the gren compiler version number (not the npm or nix package version number)
-* `git push origin [version number]`
+* Test with `nix build .#` which should build an executable at `./result/bin/gren`
+* Commit the updated `package.json`, `package-lock.json` and `flake.lock` files
+* `git tag -a [version]`
+* `git push origin main --tags`
+* Test with `nix shell github:gren-lang/nix/[version]

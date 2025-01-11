@@ -24,4 +24,4 @@ You can point to a specific ref (commit, tag, branch) like this:
 * Commit the updated `package.json`, `package-lock.json` and `flake.lock` files
 * `git tag -a [version]`
 * `git push origin main --tags`
-* Test with `nix shell github:gren-lang/nix/[version]
+* Test with `nix shell github:gren-lang/nix/[version]`

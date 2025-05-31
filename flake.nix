@@ -3,7 +3,7 @@
   description = "The Gren programming language";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     systems.url = "github:nix-systems/default";
   };
 

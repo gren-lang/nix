@@ -13,8 +13,6 @@
     nixpkgs,
   }: let
     eachSystem = nixpkgs.lib.genAttrs (import systems);
-    pkgJson = builtins.fromJSON (builtins.readFile ./package.json);
-    pkgLock = builtins.fromJSON (builtins.readFile ./package-lock.json);
     nodePkg = "nodejs_20";
   in {
     devShells = eachSystem (system: {
@@ -22,7 +20,6 @@
         mkShell {
           buildInputs = [
             pkgs.${nodePkg}
-            pkgs.alejandra
           ];
         };
     });
@@ -30,37 +27,24 @@
       default = with import nixpkgs {inherit system;}; let
         # Download all packages that end up in node_modules so they can be
         # pulled from cache in the build phase when we are sandboxed.
-        gren = pkgs.fetchurl {
-          url = pkgLock.packages.${"node_modules/gren-lang"}.resolved;
-          hash = pkgLock.packages.${"node_modules/gren-lang"}.integrity;
+        gren = builtins.fetchTree {
+          type = "github";
+          owner = "gren-lang";
+          repo = "compiler";
+          rev = "1d6464ca679893422ee9976cdbed8123508cfffc";
         };
-        postject = pkgs.fetchurl {
-          url = pkgLock.packages.${"node_modules/postject"}.resolved;
-          hash = pkgLock.packages.${"node_modules/postject"}.integrity;
-        };
-        commander = pkgs.fetchurl {
-          url = pkgLock.packages.${"node_modules/commander"}.resolved;
-          hash = pkgLock.packages.${"node_modules/commander"}.integrity;
-        };
+        pkgJson = builtins.fromJSON (builtins.readFile "${gren.outPath}/package.json");
       in
         pkgs.stdenv.mkDerivation {
-          src = ./.;
+          src = gren.outPath;
           pname = "gren";
-          version = pkgJson.dependencies.${"gren-lang"};
+          version = pkgJson.version;
           buildInputs = [pkgs.${nodePkg}];
           buildPhase = ''
-            export HOME=$PWD/.home
-            export npm_config_cache=$PWD/.npm
-            mkdir -p $out/js
-            cd $out/js
-            cp -r $src/. .
-            npm cache add "${gren}"
-            npm cache add "${postject}"
-            npm cache add "${commander}"
-            npm ci
+            mkdir -p $out/bin
           '';
           installPhase = ''
-            ln -s $out/js/node_modules/.bin $out/bin
+            cp $src/bin/compiler $out/bin/gren
           '';
         };
     });

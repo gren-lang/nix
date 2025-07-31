@@ -31,7 +31,7 @@
           type = "github";
           owner = "gren-lang";
           repo = "compiler";
-          rev = "e2c4ff814a043f02fb9e55ab09e681ff78dc10e3";
+          rev = "b54f0343c8015c777e4fbb74e843181e6f3cb214";
         };
         pkgJson = builtins.fromJSON (builtins.readFile "${gren.outPath}/package.json");
       in
@@ -40,11 +40,17 @@
           pname = "gren";
           version = pkgJson.version;
           buildInputs = [pkgs.${nodePkg}];
-          buildPhase = ''
-            mkdir -p $out/bin
-          '';
+          nativeBuildInputs = [makeBinaryWrapper];
           installPhase = ''
-            cp $src/bin/compiler $out/bin/gren
+            runHook preInstall
+
+            # install the precompiled frontend into the proper location
+            install -Dm755 bin/compiler $out/bin/gren
+
+            wrapProgram $out/bin/gren \
+              --suffix PATH : ${lib.makeBinPath [ git ]}
+
+            runHook postInstall
           '';
         };
     });

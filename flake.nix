@@ -1,3 +1,4 @@
+# inspired by https://www.nmattia.com/posts/2022-12-18-lockfile-trick-package-npm-project-with-nix/
 {
   description = "The Gren programming language";
 
@@ -32,29 +33,18 @@
           repo = "compiler";
           rev = "e2c4ff814a043f02fb9e55ab09e681ff78dc10e3";
         };
-
         pkgJson = builtins.fromJSON (builtins.readFile "${gren.outPath}/package.json");
       in
         pkgs.stdenv.mkDerivation {
-          src = ./.;
+          src = gren.outPath;
           pname = "gren";
           version = pkgJson.version;
           buildInputs = [pkgs.${nodePkg}];
           buildPhase = ''
             mkdir -p $out/bin
-            mkdir -p $out/libexec/gren
-
-            cat ${gren.outPath}/bin/compiler | node ./prep.js > compiler.prepped.js
-            node --snapshot-blob $out/libexec/gren/compiler.snapshot.js --build-snapshot compiler.prepped.js
           '';
           installPhase = ''
-            cat <<EOF > "$out/bin/gren"
-            #!/usr/bin/env bash
-            # ${pkgs.git}
-            ${pkgs.${nodePkg}}/bin/node --snapshot-blob $out/libexec/gren/compiler.snapshot.js
-            EOF
-
-            chmod +x "$out/bin/gren"
+            cp $src/bin/compiler $out/bin/gren
           '';
         };
     });

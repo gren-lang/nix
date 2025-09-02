@@ -31,7 +31,7 @@
           type = "github";
           owner = "gren-lang";
           repo = "compiler";
-          rev = "b54f0343c8015c777e4fbb74e843181e6f3cb214";
+          rev = "0343e77040f97864e5eb9790dd9ba0bb5fe1d6ee";
         };
         pkgJson = builtins.fromJSON (builtins.readFile "${gren.outPath}/package.json");
       in

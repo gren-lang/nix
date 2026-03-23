@@ -1,9 +1,8 @@
-# inspired by https://www.nmattia.com/posts/2022-12-18-lockfile-trick-package-npm-project-with-nix/
 {
   description = "The Gren programming language";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
     systems.url = "github:nix-systems/default";
   };
 
@@ -31,7 +30,7 @@
           type = "github";
           owner = "gren-lang";
           repo = "compiler";
-          rev = "54277a25d47b5c20816550ff6deab89026797526";
+          rev = "d7007633d12997648e26070e652bb8c87be1e0f6";
         };
         pkgJson = builtins.fromJSON (builtins.readFile "${gren.outPath}/package.json");
       in
